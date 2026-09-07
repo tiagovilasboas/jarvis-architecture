@@ -1,12 +1,8 @@
 # Jarvis Architecture
 
-## Purpose / Propósito
+Vendor-agnostic multi-agent **reference architecture** — **brain · workers · ops**. Goose, Cursor, Codex, and CLIs are *examples*, not dependencies; Staff teams swap a host without rewriting the domain.
 
-**PT:** Documentar uma **arquitetura de referência** multi-agent — **brain · workers · ops** — agnóstica de vendor. Goose, Cursor, Codex e CLIs aparecem como *exemplos*, não como dependências. Objetivo: times Staff conseguirem **trocar runtime sem reescrever o domínio**.
-
-**EN:** Document a vendor-agnostic multi-agent **reference architecture** — **brain · workers · ops**. Goose, Cursor, Codex, and CLIs are *examples*, not hard dependencies. Goal: Staff teams can **swap runtimes without rewriting the domain**.
-
-> Jarvis = nome do modelo mental. Este repo **não** é o monorepo privado de produto.
+Jarvis is the mental-model name. This repo is not a private product monorepo.
 
 Maintainer: [Tiago Montanha](https://github.com/tiagovilasboas) · Staff · Agentic AI
 
@@ -55,22 +51,22 @@ Decision log (index + status): [docs/adr/README.md](docs/adr/README.md). Format:
 
 ---
 
-## Inspired by
+## Related
 
-- [Goose architecture](https://block-goose.mintlify.app/concepts/architecture) · [agents/subagents](https://block-goose.mintlify.app/concepts/agents)
-- [Building effective agents](https://www.anthropic.com/engineering/building-effective-agents)
-- [OpenAI Agents SDK](https://github.com/openai/openai-agents-python)
-- [A2A Protocol](https://a2a-protocol.org/) · [What is A2A?](https://a2a-protocol.org/latest/topics/what-is-a2a/) · [ACP](https://agentclientprotocol.com/)
-- [LangGraph multi-agent](https://langchain-ai.github.io/langgraph/concepts/multi_agent/)
-- [MCP](https://modelcontextprotocol.io) · [MCP architecture](https://modelcontextprotocol.io/docs/learn/architecture)
-- [Architectural Decision Records](https://adr.github.io/)
+- [awesome-agentic-ai](https://github.com/tiagovilasboas/awesome-agentic-ai) — MCP · harness · HITL · agent security
+- [agent-measurement](https://github.com/tiagovilasboas/agent-measurement) — Measure, do not train
+- [kiro-playbook](https://github.com/tiagovilasboas/kiro-playbook)
 
-Related: [awesome-agentic-ai](https://github.com/tiagovilasboas/awesome-agentic-ai) · [agent-measurement](https://github.com/tiagovilasboas/agent-measurement) · [kiro-playbook](https://github.com/tiagovilasboas/kiro-playbook)
+Public refs: [Goose architecture](https://block-goose.mintlify.app/concepts/architecture) · [agents/subagents](https://block-goose.mintlify.app/concepts/agents) · [Building effective agents](https://www.anthropic.com/engineering/building-effective-agents) · [OpenAI Agents SDK](https://github.com/openai/openai-agents-python) · [A2A Protocol](https://a2a-protocol.org/) · [ACP](https://agentclientprotocol.com/) · [LangGraph multi-agent](https://langchain-ai.github.io/langgraph/concepts/multi_agent/) · [MCP](https://modelcontextprotocol.io) · [Architectural Decision Records](https://adr.github.io/)
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for how to propose an ADR. Agent notes: [AGENTS.md](AGENTS.md).
+See [CONTRIBUTING.md](CONTRIBUTING.md) for how to propose an ADR.
 
 ## License
 
 [MIT](LICENSE)
+
+## AGENTS.md
+
+Agent layout and do/don't: [AGENTS.md](AGENTS.md).
