@@ -5,10 +5,12 @@ Vendor-agnostic multi-agent **reference architecture** (brain · workers · ops)
 ## Layout
 
 ```text
+docs/adr/README.md
 docs/adr/NNNN-short-title-with-dashes.md
+docs/swap-runtime.md
 ```
 
-Existing records: `0001-brain-vs-workers`, `0002-hitl-on-writes`, `0003-vendor-agnostic`.
+Existing records: `0001-brain-vs-workers`, `0002-hitl-on-writes`, `0003-vendor-agnostic`. Index: `docs/adr/README.md`.
 
 ## Do
 
