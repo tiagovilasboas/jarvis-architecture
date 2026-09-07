@@ -7,6 +7,7 @@ Aligned with:
 - [ADR 0001 — Brain vs workers](adr/0001-brain-vs-workers.md)
 - [ADR 0002 — HITL on writes](adr/0002-hitl-on-writes.md)
 - [ADR 0003 — Vendor-agnostic](adr/0003-vendor-agnostic.md)
+- [ADR 0004 — Handoff contracts](adr/0004-handoff-contracts.md) · [cookbook](cookbook-handoff.md)
 - [Building effective agents](https://www.anthropic.com/engineering/building-effective-agents) (prefer simple, composable patterns; add complexity only when it improves outcomes)
 - [MCP architecture](https://modelcontextprotocol.io/docs/learn/architecture) (agent-to-tool context: host / client / server)
 - [What is A2A?](https://a2a-protocol.org/latest/topics/what-is-a2a/) (agent-to-agent collaboration; do not wrap agents as tools)
@@ -18,7 +19,7 @@ Aligned with:
 | Layer contracts: brain plans/routes; workers execute in narrow scope; ops owns logs, evals, HITL | IDE / CLI / SDK that hosts the session |
 | Worker tool *surfaces* described as MCP servers (tools · resources · prompts) | Which MCP host wires those servers |
 | Write policy: fail closed (HITL or allowlist) | How the host surfaces approval UX |
-| Brain↔worker handoff shape (prompt/event contract) | Model vendor and sampling knobs |
+| Brain↔worker↔ops [handoff envelope](adr/0004-handoff-contracts.md) (`handoff/v1`) | Model vendor, sampling knobs, and how the host serializes the envelope |
 | Agent-to-agent collaboration via A2A when peers must negotiate | Whether peers live in one process or across vendors |
 
 ## Protocol split (do not collapse)
@@ -40,8 +41,9 @@ Brain  --plan/route-->  Workers  --tools/data-->  MCP servers
 3. **Confirm secrets stay at the worker edge** — brain must not hold production credentials for every tool ([ADR 0001](adr/0001-brain-vs-workers.md)).
 4. **Re-bind MCP servers** in the new host; keep server IDs and tool names stable so worker prompts stay valid.
 5. **Re-wire HITL** for merges, payments, deletes, and external messages ([ADR 0002](adr/0002-hitl-on-writes.md)). Fail closed until the new approval path is tested.
-6. **Smoke the same eval** (or a thin dry-run) against the new host; if quality drops, fix the glue — do not fork the domain prompts for one vendor.
-7. **Name the new host as an example** in docs, never as the definition of the architecture ([ADR 0003](adr/0003-vendor-agnostic.md)).
+6. **Re-bind the handoff adapter** so `assign` / `result` / `hitl_*` keep [ADR 0004](adr/0004-handoff-contracts.md) field names. Do not replace the envelope with a host transcript ([cookbook](cookbook-handoff.md)).
+7. **Smoke the same eval** (or a thin dry-run) against the new host; if quality drops, fix the glue — do not fork the domain prompts for one vendor.
+8. **Name the new host as an example** in docs, never as the definition of the architecture ([ADR 0003](adr/0003-vendor-agnostic.md)).
 
 ## What “done” looks like
 
@@ -49,7 +51,7 @@ You swapped successfully when a Staff engineer can:
 
 1. Point a different host at the same brain/worker docs and MCP servers.
 2. Keep HITL (or the allowlist) on writes without a domain rewrite.
-3. Explain the change in one ADR or a short note — not a rewrite of `docs/adr/0001`–`0003`.
+3. Explain the change in one ADR or a short note — not a rewrite of `docs/adr/0001`–`0004`.
 
 ## Out of scope here
 

@@ -78,8 +78,9 @@ Accepted records live in `docs/adr/`. Start from the [ADR index](docs/adr/README
 - [0001 — Brain vs workers](docs/adr/0001-brain-vs-workers.md)
 - [0002 — HITL on writes](docs/adr/0002-hitl-on-writes.md)
 - [0003 — Vendor-agnostic](docs/adr/0003-vendor-agnostic.md)
+- [0004 — Handoff contracts](docs/adr/0004-handoff-contracts.md)
 
-Runtime swap without a domain rewrite: [docs/swap-runtime.md](docs/swap-runtime.md).
+Runtime swap without a domain rewrite: [docs/swap-runtime.md](docs/swap-runtime.md). Typed handoff payloads: [docs/cookbook-handoff.md](docs/cookbook-handoff.md).
 
 ## Principles (do / don't)
 
@@ -89,6 +90,7 @@ Runtime swap without a domain rewrite: [docs/swap-runtime.md](docs/swap-runtime.
 - Treat MCP (host / client / server, tools · resources · prompts) as the agent-to-tool protocol, not as a vendor.
 - Treat A2A as complementary: agent-to-agent collaboration without wrapping agents as tools.
 - Keep HITL (or an explicit allowlist) on writes; fail closed.
+- Pass work between layers as a typed handoff envelope ([ADR 0004](docs/adr/0004-handoff-contracts.md)), not a pasted transcript.
 - Name examples (Goose, Cursor, Codex, Kiro) as examples only.
 
 **Don't**
