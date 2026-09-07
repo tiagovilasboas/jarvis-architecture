@@ -1,16 +1,18 @@
 # Jarvis Architecture
 
-**PT** · Arquitetura de **referência** multi-agent: **brain · workers · ops**. Agnóstica de vendor — Goose, Cursor, Codex, CLIs são *exemplos*, não dependências.
+## Purpose / Propósito
 
-**EN** · **Reference** multi-agent architecture: **brain · workers · ops**. Vendor-agnostic — Goose / Cursor / Codex / CLIs are *examples*, not hard deps.
+**PT:** Documentar uma **arquitetura de referência** multi-agent — **brain · workers · ops** — agnóstica de vendor. Goose, Cursor, Codex e CLIs aparecem como *exemplos*, não como dependências. Objetivo: times Staff conseguirem **trocar runtime sem reescrever o domínio**.
 
-Maintainer: [Tiago Montanha](https://github.com/tiagovilasboas) · Staff · Agentic AI
+**EN:** Document a vendor-agnostic multi-agent **reference architecture** — **brain · workers · ops**. Goose, Cursor, Codex, and CLIs are *examples*, not hard dependencies. Goal: Staff teams can **swap runtimes without rewriting the domain**.
 
 > Jarvis = nome do modelo mental. Este repo **não** é o monorepo privado de produto.
 
+Maintainer: [Tiago Montanha](https://github.com/tiagovilasboas) · Staff · Agentic AI
+
 ---
 
-## Modelo / Model
+## Model
 
 ```
 ┌─────────────┐     ┌──────────────────┐     ┌─────────────┐
@@ -19,36 +21,32 @@ Maintainer: [Tiago Montanha](https://github.com/tiagovilasboas) · Staff · Agen
 └─────────────┘     └──────────────────┘     └─────────────┘
 ```
 
-| Peça | PT | EN |
-|---|---|---|
-| Brain | Planeja, decompõe, escolhe worker | Plans, decomposes, routes |
-| Workers | Escopo estreito + tools | Narrow scope + tools |
-| Ops | Logs, evals, HITL em write | Logs, evals, HITL on writes |
+| Layer | Responsibility |
+|---|---|
+| Brain | Plan, decompose, route |
+| Workers | Narrow scope + tools (MCP) |
+| Ops | Logs, evals, HITL on writes |
 
 ---
 
-## ADRs (esqueleto)
+## ADRs
 
-- `docs/adr/0001-brain-vs-workers.md` — por que separar
-- `docs/adr/0002-hitl-on-writes.md` — fail closed em mutação
-- `docs/adr/0003-vendor-agnostic.md` — trocar runtime sem reescrever domínio
-
----
-
-## O que entra / What belongs
-
-- Padrões, anti-padrões, diagramas, checklists Staff
-- Exemplos com **nomes genéricos** (sem IP de cliente)
-
-## O que não entra / Out of scope
-
-- Binding a um único IDE/vendor
-- Código de produção confidencial
-- Open Finance / produtos fechados
-
-Relacionados: [awesome-agentic-ai](https://github.com/tiagovilasboas/awesome-agentic-ai) · [agent-measurement](https://github.com/tiagovilasboas/agent-measurement)
+- [0001 — Brain vs workers](docs/adr/0001-brain-vs-workers.md)
+- [0002 — HITL on writes](docs/adr/0002-hitl-on-writes.md)
+- [0003 — Vendor-agnostic](docs/adr/0003-vendor-agnostic.md)
 
 ---
+
+## Inspired by
+
+- [Goose architecture](https://block-goose.mintlify.app/concepts/architecture) · [agents/subagents](https://block-goose.mintlify.app/concepts/agents)
+- [Building effective agents](https://www.anthropic.com/engineering/building-effective-agents)
+- [OpenAI Agents SDK](https://github.com/openai/openai-agents-python)
+- [A2A Protocol](https://a2a-protocol.org/) · [ACP](https://agentclientprotocol.com/)
+- [LangGraph multi-agent](https://langchain-ai.github.io/langgraph/concepts/multi_agent/)
+- [MCP](https://modelcontextprotocol.io)
+
+Related: [awesome-agentic-ai](https://github.com/tiagovilasboas/awesome-agentic-ai) · [agent-measurement](https://github.com/tiagovilasboas/agent-measurement)
 
 ## License
 
