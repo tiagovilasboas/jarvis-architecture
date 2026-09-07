@@ -46,7 +46,7 @@ Maintainer: [Tiago Montanha](https://github.com/tiagovilasboas) · Staff · Agen
 - [LangGraph multi-agent](https://langchain-ai.github.io/langgraph/concepts/multi_agent/)
 - [MCP](https://modelcontextprotocol.io)
 
-Related: [awesome-agentic-ai](https://github.com/tiagovilasboas/awesome-agentic-ai) · [agent-measurement](https://github.com/tiagovilasboas/agent-measurement)
+Related: [awesome-agentic-ai](https://github.com/tiagovilasboas/awesome-agentic-ai) · [agent-measurement](https://github.com/tiagovilasboas/agent-measurement) · [kiro-playbook](https://github.com/tiagovilasboas/kiro-playbook)
 
 ## License
 
