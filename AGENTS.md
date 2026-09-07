@@ -8,9 +8,10 @@ Vendor-agnostic multi-agent **reference architecture** (brain · workers · ops)
 docs/adr/README.md
 docs/adr/NNNN-short-title-with-dashes.md
 docs/swap-runtime.md
+docs/cookbook-handoff.md
 ```
 
-Existing records: `0001-brain-vs-workers`, `0002-hitl-on-writes`, `0003-vendor-agnostic`. Index: `docs/adr/README.md`.
+Existing records: `0001-brain-vs-workers`, `0002-hitl-on-writes`, `0003-vendor-agnostic`, `0004-handoff-contracts`. Index: `docs/adr/README.md`.
 
 ## Do
 
@@ -19,6 +20,7 @@ Existing records: `0001-brain-vs-workers`, `0002-hitl-on-writes`, `0003-vendor-a
 - Treat [MCP](https://modelcontextprotocol.io/docs/learn/architecture) as agent-to-tool context (host / client / server).
 - Treat [A2A](https://a2a-protocol.org/latest/topics/what-is-a2a/) as complementary agent-to-agent collaboration — do not wrap agents as tools.
 - Prefer [simple, composable patterns](https://www.anthropic.com/engineering/building-effective-agents); fail closed on writes (HITL or explicit allowlist).
+- Pass brain · workers · ops work as a typed [handoff envelope](docs/cookbook-handoff.md), not a transcript dump.
 
 ## Don't
 
