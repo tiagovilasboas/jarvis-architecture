@@ -1,0 +1,76 @@
+name: Propose an ADR
+description: Propose one architecturally significant decision for the decision log.
+title: "ADR: "
+labels:
+  - adr
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form to propose **one** [Architectural Decision Record](https://adr.github.io/).
+        Draft the file later as `docs/adr/NNNN-short-title-with-dashes.md` (Nygard form: Status · Context · Decision · Consequences).
+        See [CONTRIBUTING.md](../../CONTRIBUTING.md).
+  - type: input
+    id: short-title
+    attributes:
+      label: Short title
+      description: Noun phrase for the decision (becomes the file slug).
+      placeholder: Fail closed on external messaging
+    validations:
+      required: true
+  - type: dropdown
+    id: significance
+    attributes:
+      label: Why is this architecturally significant?
+      options:
+        - Layer boundaries (brain / workers / ops)
+        - HITL or fail-closed write policy
+        - Protocol choice (MCP, A2A, or similar)
+        - Vendor lock-in or runtime swap without rewriting the domain
+        - Other (explain in context)
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Context and problem
+      description: Value-neutral facts and forces. What question must the decision answer?
+      placeholder: Monolithic agents mix planning and irreversible writes in one context window…
+    validations:
+      required: true
+  - type: textarea
+    id: options
+    attributes:
+      label: Considered options
+      description: At least two options, including the status quo if it exists.
+      placeholder: |
+        1. Keep a single agent with all tools
+        2. Separate brain (plan/route) from workers (scoped tools)
+        3. …
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed decision
+      description: The option you recommend, and why (drivers, not slogans).
+    validations:
+      required: true
+  - type: textarea
+    id: consequences
+    attributes:
+      label: Expected consequences
+      description: Positive, negative, and neutral effects after the decision is applied.
+    validations:
+      required: true
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I read the existing ADRs under `docs/adr/`.
+          required: true
+        - label: This issue proposes a single decision (not a bundle).
+          required: true
+        - label: Examples (Goose, Cursor, Codex, Kiro) stay examples, not dependencies.
+          required: true

@@ -48,6 +48,10 @@ Maintainer: [Tiago Montanha](https://github.com/tiagovilasboas) · Staff · Agen
 
 Related: [awesome-agentic-ai](https://github.com/tiagovilasboas/awesome-agentic-ai) · [agent-measurement](https://github.com/tiagovilasboas/agent-measurement) · [kiro-playbook](https://github.com/tiagovilasboas/kiro-playbook)
 
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for how to propose an ADR. Agent notes: [AGENTS.md](AGENTS.md).
+
 ## License
 
-MIT
+[MIT](LICENSE)
