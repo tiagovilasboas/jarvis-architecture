@@ -11,6 +11,7 @@ How to propose a new record: [CONTRIBUTING.md](../../CONTRIBUTING.md).
 | [0001](0001-brain-vs-workers.md) | Accepted | Brain vs workers | Separate planner (brain) from scoped executors (workers); brain does not hold every tool secret. |
 | [0002](0002-hitl-on-writes.md) | Accepted | HITL on writes | Fail closed on mutations: human-in-the-loop or explicit allowlist; reads may be optimistic. |
 | [0003](0003-vendor-agnostic.md) | Accepted | Vendor-agnostic runtime | Architecture = layers + open protocols; Goose / Cursor / Codex / Kiro are examples only. |
+| [0004](0004-handoff-contracts.md) | Accepted | Handoff contracts | Typed envelope between brain · workers · ops; refs not transcripts; writes stay fail-closed. |
 
 ## Status lifecycle
 
@@ -21,4 +22,5 @@ Never reuse a number. When reversing a decision, keep the old file and mark it `
 ## Related
 
 - Runtime swap checklist (no domain rewrite): [../swap-runtime.md](../swap-runtime.md)
+- Handoff cookbook (payloads): [../cookbook-handoff.md](../cookbook-handoff.md)
 - Layer model (brain · workers · ops): [../../README.md](../../README.md)
