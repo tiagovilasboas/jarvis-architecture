@@ -73,11 +73,13 @@ docs/adr/0004-example-decision.md
 
 ## Decision log
 
-Accepted records live in `docs/adr/` and are listed from the README. Read them before proposing a new one — especially:
+Accepted records live in `docs/adr/`. Start from the [ADR index](docs/adr/README.md) (also linked from the README). Read them before proposing a new one — especially:
 
 - [0001 — Brain vs workers](docs/adr/0001-brain-vs-workers.md)
 - [0002 — HITL on writes](docs/adr/0002-hitl-on-writes.md)
 - [0003 — Vendor-agnostic](docs/adr/0003-vendor-agnostic.md)
+
+Runtime swap without a domain rewrite: [docs/swap-runtime.md](docs/swap-runtime.md).
 
 ## Principles (do / don't)
 
