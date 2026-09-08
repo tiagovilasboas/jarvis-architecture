@@ -12,6 +12,8 @@ Stand up **brain · workers · ops** on any host. One goal. Typed envelopes, not
 
 **~10 min:** this section → [envelope](#envelope) field table → the `assign` below → [siblings](#siblings). Open a sibling only when the box says so.
 
+**Broken envelope → ops reconstruction (~10 min):** [broken handoff](#broken-handoff).
+
 ### Brain plans → workers do scoped work → ops measures
 
 | Step | Layer | Do | Stop when |
@@ -20,7 +22,7 @@ Stand up **brain · workers · ops** on any host. One goal. Typed envelopes, not
 | 2 | **Workers** | Run the scoped job. Call only `budget.tools`. Findings need `path:line` (or silence). Mutations are `proposed_writes`, not applied. | `result` is `ok`, `needs_hitl`, `blocked`, or `failed` |
 | 3 | **Ops** | Bind eval rows to `id` + `trace_id`. Approve a write from canonical `proposed_writes.params` — or block. A red eval is `failed`, not a write. | You can reconstruct the outcome without the original chat ([ADR 0005](adr/0005-ops-owns-reconstruction.md)) |
 
-Green write path: [propose a merge](#propose-a-merge). Eval-red, no write: [ops failure](#ops-failure). Fail closed on mutations: [ADR 0002](adr/0002-hitl-on-writes.md).
+Green write path: [propose a merge](#propose-a-merge). Eval-red, no write: [ops failure](#ops-failure). Silent write, cannot reconstruct: [broken handoff](#broken-handoff). Fail closed on mutations: [ADR 0002](adr/0002-hitl-on-writes.md).
 
 <a id="week-1-assign"></a>
 
@@ -92,8 +94,8 @@ Do not copy sibling role names into the envelope `role` field. `role` is a worke
 | [0001 — Brain vs workers](adr/0001-brain-vs-workers.md) | [assign](#assign) — no secrets on the brain payload |
 | [0002 — HITL on writes](adr/0002-hitl-on-writes.md) | [Propose a merge](#propose-a-merge) |
 | [0003 — Vendor-agnostic](adr/0003-vendor-agnostic.md) | [Mapping](#mapping) |
-| [0004 — Handoff contracts](adr/0004-handoff-contracts.md) | [Envelope](#envelope) |
-| [0005 — Ops owns reconstruction](adr/0005-ops-owns-reconstruction.md) | [Ops failure](#ops-failure) |
+| [0004 — Handoff contracts](adr/0004-handoff-contracts.md) | [Envelope](#envelope) · [broken handoff](#broken-handoff) |
+| [0005 — Ops owns reconstruction](adr/0005-ops-owns-reconstruction.md) | [Ops failure](#ops-failure) · [broken handoff](#broken-handoff) |
 
 Index: [docs/adr/README.md](adr/README.md).
 
@@ -513,6 +515,127 @@ sequenceDiagram
 
 Ops can reconstruct the outcome from `status`, `errors`, and this row. A host incident ticket may *display* the same `id` / `trace_id`; it does not replace them. Brain may assign a **new** child to fix the two findings — new `id`, same `correlation_id`. Do not mutate `hnd_7f3a2c10` or retry by pasting a transcript.
 
+<a id="broken-handoff"></a>
+
+## Worked example — broken handoff → ops reconstruction
+
+Same `correlation_id` as the merge path. The reviewer **applied** the squash-merge and returned `ok`. Ops is left with a chat blob. That write cannot be rebuilt from envelope fields — so it must not count as done ([ADR 0004](adr/0004-handoff-contracts.md), [ADR 0005](adr/0005-ops-owns-reconstruction.md)). Host can be Goose, Cursor, Codex, a CLI — irrelevant; the envelope is the control.
+
+**~10 min:** broken JSON → layer table → fixed JSON → notes. Do not open a sibling.
+
+### Broken `result` (silent write)
+
+Primary failure: **silent write**. Symptoms you will also see: untyped blob, missing `trace_id`, empty `proposed_writes`, reviewer acting as merger.
+
+```json
+{
+  "schema": "handoff/v1",
+  "id": "hnd_c4e91b70",
+  "correlation_id": "corr_pr_1842",
+  "parent_id": "hnd_7f3a2c10",
+  "from": { "layer": "worker", "role": "code-reviewer" },
+  "to": { "layer": "brain", "role": "planner" },
+  "kind": "result",
+  "goal": "Review PR 1842 against acceptance; propose merge only if the suite is green.",
+  "constraints": [],
+  "inputs": {
+    "refs": [],
+    "inline": {
+      "blob": "Host chat. Reviewer: LGTM. I squash-merged PR 1842 from the HUD. Thread said ship it."
+    }
+  },
+  "budget": { "tools": [] },
+  "write_policy": "hitl",
+  "acceptance": [],
+  "status": "ok",
+  "artifacts": [],
+  "evidence": ["Merged."],
+  "proposed_writes": [],
+  "errors": []
+}
+```
+
+| Defect | Contract |
+| --- | --- |
+| `status: ok` after a merge that already ran | A write under `write_policy: hitl` without a matching `hitl_decision` is a bug, not `ok` |
+| `inputs.inline.blob` transcript; `refs` empty | Refs, not blobs ([ADR 0004](adr/0004-handoff-contracts.md)) |
+| `proposed_writes` empty | Ops cannot replay params ([ADR 0005](adr/0005-ops-owns-reconstruction.md)) |
+| no `observability.trace_id` | Required; eval rows cannot bind |
+| `role: code-reviewer` applied a merge | Assign `budget.tools` was `git.diff`, `git.log`, `evals.run` — merge is out of scope ([ADR 0001](adr/0001-brain-vs-workers.md)) |
+
+### Why each layer fails closed (or detects)
+
+| Layer | Detects | Fail closed |
+| --- | --- | --- |
+| **Brain** | Missing `observability.trace_id`; `ok` on a mutation goal with no decision ref and no `proposed_writes` | Reject at ingest. Do not treat the goal as done. Do not emit a merger assign from this payload. |
+| **Workers** | Merge is not in `budget.tools`; `write_policy: hitl` | Do not apply the write. Return `needs_hitl` with canonical `proposed_writes.params`, or `blocked`. |
+| **Ops** | Cannot rebuild repo / number / `head_sha` / method from the envelope; no `trace_id` to bind an eval row | Do not proceed. Persist the broken `id` as a failed control. A host HUD thread is not the outcome. |
+
+Brain that never validates required fields will route this `ok` as success. That is how the write leaks.
+
+### Fixed `result`
+
+Mutation **proposed**, not applied. Same shape as [propose a merge](#propose-a-merge) step 2.
+
+```json
+{
+  "schema": "handoff/v1",
+  "id": "hnd_9c11e4aa",
+  "correlation_id": "corr_pr_1842",
+  "parent_id": "hnd_7f3a2c10",
+  "from": { "layer": "worker", "role": "code-reviewer" },
+  "to": { "layer": "brain", "role": "planner" },
+  "kind": "result",
+  "goal": "Review PR 1842 against acceptance; propose merge only if the suite is green.",
+  "constraints": [],
+  "inputs": {
+    "refs": [
+      { "kind": "handoff", "id": "hnd_7f3a2c10" },
+      { "kind": "artifact", "id": "art_review_1842" }
+    ]
+  },
+  "budget": { "tools": [] },
+  "write_policy": "hitl",
+  "acceptance": [],
+  "observability": {
+    "trace_id": "4bf92f3577b34da6a3ce929d0e0e4736",
+    "eval_suite": "pr-review"
+  },
+  "status": "needs_hitl",
+  "artifacts": [
+    { "kind": "artifact", "id": "art_review_1842" }
+  ],
+  "evidence": [
+    "evals.run pr-review → 6 pass, 0 fail, 1 skip (docs-only path)."
+  ],
+  "proposed_writes": [
+    {
+      "action": "merge_pull_request",
+      "reversibility": "externally_reversible",
+      "params": {
+        "repo": "example/repo",
+        "number": 1842,
+        "head_sha": "a0efe3d11808",
+        "method": "squash",
+        "delete_branch": false
+      }
+    }
+  ],
+  "errors": []
+}
+```
+
+`params` are enough to replay the write. Do not truncate them.
+
+### Ops reconstruction notes
+
+1. Persist `id`, `correlation_id`, and `trace_id` **outside** the host session ([ADR 0005](adr/0005-ops-owns-reconstruction.md)). The HUD only renders them.
+2. Rebuild the write from `proposed_writes.params` (`repo`, `number`, `head_sha`, `method`, `delete_branch`) plus the `hitl_decision` bound to the same chain. If any of those are missing, block — that is this example.
+3. Score a leaked host merge as `failed` (or a new child `assign` to inspect repo state). Do not backfill `ok`. Resume is a **new** `id` with `parent_id` set; do not mutate `hnd_7f3a2c10` or paste a new transcript.
+4. Eval rows use the same `trace_id` as the assign (`4bf92f3577b34da6a3ce929d0e0e4736`). A ticket may *display* those ids; it does not replace them.
+
+Green path continues at [propose a merge](#propose-a-merge). Eval-red, no write: [ops failure](#ops-failure).
+
 <a id="mapping"></a>
 
 ## Mapping (do not collapse)
@@ -538,7 +661,7 @@ A2A is how **peers** talk. MCP is how a worker reaches **tools**. ACP is how an 
 | --- | --- |
 | Paste the transcript as the assign | Cannot eval, cannot HITL, cannot swap the host |
 | Secrets on the brain payload | Violates [ADR 0001](adr/0001-brain-vs-workers.md) |
-| `status: ok` plus a merge that already ran | Write skipped the gate ([ADR 0002](adr/0002-hitl-on-writes.md)) |
+| `status: ok` plus a merge that already ran | Write skipped the gate ([ADR 0002](adr/0002-hitl-on-writes.md)). Walk [broken handoff](#broken-handoff) |
 | Truncated `proposed_writes` in the HUD | Approver rubber-stamps a different action than the runtime |
 | Worker named `cursor-agent` / `goose-subagent` | Vendor leaked into the domain ([ADR 0003](adr/0003-vendor-agnostic.md)) |
 | Peer agent wrapped as an MCP tool | [A2A anti-pattern](https://a2a-protocol.org/latest/topics/what-is-a2a/) |
@@ -555,6 +678,7 @@ You are done when a Staff engineer can:
 2. Approve a write from `proposed_writes.params` alone — and reject a truncated payload.
 3. Point a different host at the same envelope and keep [swap-runtime](swap-runtime.md) step 6 (same eval, no domain fork).
 4. Reconstruct a `failed` result from `ops_event` + `errors` without opening a write ([ADR 0005](adr/0005-ops-owns-reconstruction.md)).
+5. Walk [broken handoff](#broken-handoff): reject the silent `ok`, reconstruct from the fixed `result` (`proposed_writes.params` + `trace_id`).
 
 ## Out of scope
 
