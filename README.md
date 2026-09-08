@@ -36,6 +36,8 @@ Prefer [simple, composable patterns](https://www.anthropic.com/engineering/build
 
 **Week-1 (brain → workers → ops):** [docs/cookbook-handoff.md#week-1](docs/cookbook-handoff.md#week-1).
 
+**Broken handoff → ops reconstruction:** [docs/cookbook-handoff.md#broken-handoff](docs/cookbook-handoff.md#broken-handoff).
+
 **Swap a host without rewriting the domain:** [docs/swap-runtime.md](docs/swap-runtime.md).
 
 ---

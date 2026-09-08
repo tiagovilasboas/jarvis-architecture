@@ -16,15 +16,15 @@ How to propose a new record: [CONTRIBUTING.md](../../CONTRIBUTING.md).
 
 ## Cookbook map
 
-Actionable path (brain → workers → ops): [week-1](../cookbook-handoff.md#week-1).
+Actionable path (brain → workers → ops): [week-1](../cookbook-handoff.md#week-1). Silent write → reconstruction: [broken handoff](../cookbook-handoff.md#broken-handoff).
 
 | ADR | Section |
 | --- | --- |
 | [0001](0001-brain-vs-workers.md) | [assign](../cookbook-handoff.md#assign) — no secrets on the brain payload |
 | [0002](0002-hitl-on-writes.md) | [Propose a merge](../cookbook-handoff.md#propose-a-merge) |
 | [0003](0003-vendor-agnostic.md) | [Mapping](../cookbook-handoff.md#mapping) |
-| [0004](0004-handoff-contracts.md) | [Envelope](../cookbook-handoff.md#envelope) |
-| [0005](0005-ops-owns-reconstruction.md) | [Ops failure](../cookbook-handoff.md#ops-failure) |
+| [0004](0004-handoff-contracts.md) | [Envelope](../cookbook-handoff.md#envelope) · [broken handoff](../cookbook-handoff.md#broken-handoff) |
+| [0005](0005-ops-owns-reconstruction.md) | [Ops failure](../cookbook-handoff.md#ops-failure) · [broken handoff](../cookbook-handoff.md#broken-handoff) |
 
 ## Status lifecycle
 
