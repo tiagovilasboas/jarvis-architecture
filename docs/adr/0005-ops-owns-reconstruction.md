@@ -15,4 +15,4 @@ We will treat **ops** as the reconstruction and measurement plane, not a host HU
 − Chat-only hosts need an ops adapter (same class of cost as ADR 0004)
 − In-thread retry without a new `id` is a failed control
 
-Failure payloads: [cookbook-handoff](../cookbook-handoff.md).
+Failure payloads: [cookbook — ops failure](../cookbook-handoff.md#ops-failure).

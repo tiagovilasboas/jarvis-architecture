@@ -13,3 +13,6 @@ Architecture is **layers + open protocols** (MCP, A2A/ACP where useful). Goose /
 + Portable mental model
 + Honest comparison of harnesses
 − Examples need refresh as products change
+
+## Related
+Swap the host without a domain rewrite: [swap-runtime](../swap-runtime.md). Mapping, not the definition: [cookbook](../cookbook-handoff.md#mapping).

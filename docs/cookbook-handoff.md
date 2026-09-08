@@ -4,11 +4,20 @@ This is the contract [ADR 0001](adr/0001-brain-vs-workers.md) asked for and [ADR
 
 If ops cannot reconstruct the write, the control is theater ([ADR 0005](adr/0005-ops-owns-reconstruction.md)). If a host swap forces you to rewrite prompts because the payload was a pasted context window, the domain leaked into the runtime.
 
-Aligned with:
+## Decisions this illustrates
 
-- [ADR 0002 — HITL on writes](adr/0002-hitl-on-writes.md) (fail closed; reads may be optimistic)
-- [ADR 0003 — Vendor-agnostic](adr/0003-vendor-agnostic.md)
-- [ADR 0005 — Ops owns reconstruction](adr/0005-ops-owns-reconstruction.md)
+| ADR | This cookbook |
+| --- | --- |
+| [0001 — Brain vs workers](adr/0001-brain-vs-workers.md) | [assign](#assign) — no secrets on the brain payload |
+| [0002 — HITL on writes](adr/0002-hitl-on-writes.md) | [Propose a merge](#propose-a-merge) |
+| [0003 — Vendor-agnostic](adr/0003-vendor-agnostic.md) | [Mapping](#mapping) |
+| [0004 — Handoff contracts](adr/0004-handoff-contracts.md) | [Envelope](#envelope) |
+| [0005 — Ops owns reconstruction](adr/0005-ops-owns-reconstruction.md) | [Ops failure](#ops-failure) |
+
+Index: [docs/adr/README.md](adr/README.md).
+
+Public refs (do not collapse into the envelope):
+
 - [Building effective agents](https://www.anthropic.com/engineering/building-effective-agents) (orchestrator–workers; add complexity only when it improves outcomes)
 - [What is A2A?](https://a2a-protocol.org/latest/topics/what-is-a2a/) · [Life of a Task](https://a2a-protocol.org/latest/topics/life-of-a-task/)
 - [MCP architecture](https://modelcontextprotocol.io/docs/learn/architecture) (agent-to-tool; not agent-to-agent)
@@ -43,6 +52,8 @@ sequenceDiagram
   Brain->>Worker: assign (resume)
   Worker->>Brain: result (ok)
 ```
+
+<a id="envelope"></a>
 
 ## Envelope
 
@@ -100,6 +111,8 @@ type Handoff = {
 
 ## Directions
 
+<a id="assign"></a>
+
 ### `assign` — brain → worker
 
 Brain decomposes; worker does not re-plan the whole job. Goal + constraints + refs + tool allowlist. No production secrets in the envelope.
@@ -122,6 +135,8 @@ Progress, eval scores, traces. No side effects.
 ### `hitl_request` / `hitl_decision` — brain/worker ↔ ops
 
 The request shows **canonical, untruncated** write parameters (diff, command, recipients, amounts) — [AISVS C9.2](https://github.com/OWASP/AISVS/blob/main/1.0/en/0x10-C09-Orchestration-and-Agentic-Action.md). Timeout without a decision **blocks** the write ([AISVS 9.6.2](https://github.com/OWASP/AISVS/blob/main/1.0/en/0x10-C09-Orchestration-and-Agentic-Action.md)). Decision binds to the same `id` (or a child whose `parent_id` is that id).
+
+<a id="propose-a-merge"></a>
 
 ## Worked example — propose a merge
 
@@ -319,6 +334,8 @@ Brain may then assign a **merger** worker with `write_policy: allowlist` scoped 
 }
 ```
 
+<a id="ops-failure"></a>
+
 ## Worked example — ops failure (eval red)
 
 Same `correlation_id` as the merge path. The suite is red. There is **no write to approve** — mutation policy is [ADR 0002](adr/0002-hitl-on-writes.md); this path is scoring ([ADR 0005](adr/0005-ops-owns-reconstruction.md)). Host can be Goose, Cursor, Codex, a CLI — irrelevant to the envelope.
@@ -412,6 +429,8 @@ sequenceDiagram
 ```
 
 Ops can reconstruct the outcome from `status`, `errors`, and this row. A host incident ticket may *display* the same `id` / `trace_id`; it does not replace them. Brain may assign a **new** child to fix the two findings — new `id`, same `correlation_id`. Do not mutate `hnd_7f3a2c10` or retry by pasting a transcript.
+
+<a id="mapping"></a>
 
 ## Mapping (do not collapse)
 
