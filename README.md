@@ -34,9 +34,9 @@ flowchart LR
 
 Prefer [simple, composable patterns](https://www.anthropic.com/engineering/building-effective-agents) (for example orchestrator–workers). Use [A2A](https://a2a-protocol.org/latest/topics/what-is-a2a/) when agents must collaborate as peers — do not wrap agents as tools.
 
-**Swap a host without rewriting the domain:** [docs/swap-runtime.md](docs/swap-runtime.md).
+**Week-1 (brain → workers → ops):** [docs/cookbook-handoff.md#week-1](docs/cookbook-handoff.md#week-1).
 
-**Typed handoffs (brain · workers · ops):** [docs/cookbook-handoff.md](docs/cookbook-handoff.md) · [ADR 0004](docs/adr/0004-handoff-contracts.md) · [ADR 0005](docs/adr/0005-ops-owns-reconstruction.md).
+**Swap a host without rewriting the domain:** [docs/swap-runtime.md](docs/swap-runtime.md).
 
 ---
 

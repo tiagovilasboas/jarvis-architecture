@@ -16,6 +16,8 @@ How to propose a new record: [CONTRIBUTING.md](../../CONTRIBUTING.md).
 
 ## Cookbook map
 
+Actionable path (brain → workers → ops): [week-1](../cookbook-handoff.md#week-1).
+
 | ADR | Section |
 | --- | --- |
 | [0001](0001-brain-vs-workers.md) | [assign](../cookbook-handoff.md#assign) — no secrets on the brain payload |
@@ -33,7 +35,7 @@ Never reuse a number. When reversing a decision, keep the old file and mark it `
 ## Related
 
 - Runtime swap checklist (no domain rewrite): [../swap-runtime.md](../swap-runtime.md)
-- Handoff cookbook (payloads): [../cookbook-handoff.md](../cookbook-handoff.md)
+- Handoff cookbook (week-1 + payloads): [../cookbook-handoff.md#week-1](../cookbook-handoff.md#week-1)
 - Layer model (brain · workers · ops): [../../README.md](../../README.md)
 
 Ops note: persist `id`, `trace_id`, and `ops_event` outside the host session. A HUD only renders them ([0005](0005-ops-owns-reconstruction.md)). Score those rows with an eval harness, not this repo — [agent-measurement](https://github.com/tiagovilasboas/agent-measurement) (measure, do not train).
