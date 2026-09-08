@@ -13,3 +13,6 @@ Separate **brain** (plan/route) from **workers** (scoped execution with tools). 
 + Clearer scopes and evals per worker
 + Easier vendor swap at the edge
 − Need a thin orchestration contract (prompts/events)
+
+## Related
+The contract that fills that gap: [ADR 0004](0004-handoff-contracts.md) · [cookbook](../cookbook-handoff.md#envelope).
