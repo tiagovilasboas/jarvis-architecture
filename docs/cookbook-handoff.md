@@ -4,6 +4,87 @@ This is the contract [ADR 0001](adr/0001-brain-vs-workers.md) asked for and [ADR
 
 If ops cannot reconstruct the write, the control is theater ([ADR 0005](adr/0005-ops-owns-reconstruction.md)). If a host swap forces you to rewrite prompts because the payload was a pasted context window, the domain leaked into the runtime.
 
+<a id="week-1"></a>
+
+## Week-1 path
+
+Stand up **brain · workers · ops** on any host. One goal. Typed envelopes, not a pasted transcript ([ADR 0004](adr/0004-handoff-contracts.md)). Ops reconstructs the outcome from the same ids after a host swap ([ADR 0005](adr/0005-ops-owns-reconstruction.md)). The host is an example ([ADR 0003](adr/0003-vendor-agnostic.md)).
+
+**~10 min:** this section → [envelope](#envelope) field table → the `assign` below → [siblings](#siblings). Open a sibling only when the box says so.
+
+### Brain plans → workers do scoped work → ops measures
+
+| Step | Layer | Do | Stop when |
+| --- | --- | --- | --- |
+| 1 | **Brain** | Decompose one goal into `assign` envelopes. Refs, not blobs. No production secrets on the planner payload. | Worker can execute without re-planning the job ([ADR 0001](adr/0001-brain-vs-workers.md)) |
+| 2 | **Workers** | Run the scoped job. Call only `budget.tools`. Findings need `path:line` (or silence). Mutations are `proposed_writes`, not applied. | `result` is `ok`, `needs_hitl`, `blocked`, or `failed` |
+| 3 | **Ops** | Bind eval rows to `id` + `trace_id`. Approve a write from canonical `proposed_writes.params` — or block. A red eval is `failed`, not a write. | You can reconstruct the outcome without the original chat ([ADR 0005](adr/0005-ops-owns-reconstruction.md)) |
+
+Green write path: [propose a merge](#propose-a-merge). Eval-red, no write: [ops failure](#ops-failure). Fail closed on mutations: [ADR 0002](adr/0002-hitl-on-writes.md).
+
+<a id="week-1-assign"></a>
+
+### Typed assign (brain → worker)
+
+Illustrative — same `handoff/v1` shape as the merge story. Extra fields allowed; missing required fields fail closed.
+
+```json
+{
+  "schema": "handoff/v1",
+  "id": "hnd_7f3a2c10",
+  "correlation_id": "corr_pr_1842",
+  "parent_id": null,
+  "from": { "layer": "brain", "role": "planner" },
+  "to": { "layer": "worker", "role": "code-reviewer" },
+  "kind": "assign",
+  "goal": "Review PR 1842 against acceptance; propose merge only if the suite is green.",
+  "constraints": [
+    "Do not push, merge, or comment on the host.",
+    "Findings need path:line. No invented issues."
+  ],
+  "inputs": {
+    "refs": [
+      { "kind": "uri", "id": "https://example.invalid/repo/pull/1842" },
+      { "kind": "path", "id": "docs/adr/0002-hitl-on-writes.md" }
+    ],
+    "inline": { "head_sha": "a0efe3d11808", "base": "main" }
+  },
+  "budget": {
+    "tokens": 80000,
+    "time_ms": 180000,
+    "tools": ["git.diff", "git.log", "evals.run"]
+  },
+  "write_policy": "hitl",
+  "acceptance": [
+    "Each finding has path:line and a quote from the diff.",
+    "Merge is proposed, not applied.",
+    "Eval suite pr-review reports pass or skip — never silent fail."
+  ],
+  "observability": {
+    "trace_id": "4bf92f3577b34da6a3ce929d0e0e4736",
+    "eval_suite": "pr-review"
+  }
+}
+```
+
+Workers fetch `inputs.refs` with **their** credentials. Resume is a new `id` with `parent_id` set — do not mutate this envelope. Full sequence: [propose a merge](#propose-a-merge) (steps 2–5).
+
+<a id="siblings"></a>
+
+### When to use siblings
+
+This repo is the layer model. Siblings are scoped kits — not implementations of these ADRs.
+
+| When you need | Open |
+| --- | --- |
+| Evals — suites, named metrics, markdown reports | [agent-measurement](https://github.com/tiagovilasboas/agent-measurement) |
+| AppSec PR review — `path:line` or silence | [agentic-code-review](https://github.com/tiagovilasboas/agentic-code-review) |
+| Role cards — Planner / Implementer / Reviewer / Ops | [kiro-crew](https://github.com/tiagovilasboas/kiro-crew) · [`crew/roles.md`](https://github.com/tiagovilasboas/kiro-crew/blob/main/crew/roles.md) |
+| Desktop chief-of-staff + what enters the window | [grok-bot-architecture](https://github.com/tiagovilasboas/grok-bot-architecture) · [`context-engineering.md`](https://github.com/tiagovilasboas/grok-bot-architecture/blob/main/docs/context-engineering.md) |
+| Whether to add an MCP server or harness at all | [awesome-agentic-ai](https://github.com/tiagovilasboas/awesome-agentic-ai) (curation filter) |
+
+Do not copy sibling role names into the envelope `role` field. `role` is a worker scope, not a kit.
+
 ## Decisions this illustrates
 
 | ADR | This cookbook |
@@ -143,6 +224,8 @@ The request shows **canonical, untruncated** write parameters (diff, command, re
 Domain: review a PR, then **propose** a merge. Merge is a write ([ADR 0002](adr/0002-hitl-on-writes.md)). Host can be Goose, Cursor, Codex, a CLI — irrelevant to the envelope.
 
 ### 1. Brain assigns the reviewer
+
+Same `assign` as [week-1](#week-1-assign). Repeated so the merge sequence reads in one place.
 
 ```json
 {
@@ -468,7 +551,7 @@ A2A is how **peers** talk. MCP is how a worker reaches **tools**. ACP is how an 
 
 You are done when a Staff engineer can:
 
-1. Emit `assign` / `result` / `hitl_*` without naming a host.
+1. Walk [week-1](#week-1) without naming a host, then emit `assign` / `result` / `hitl_*` from the envelope.
 2. Approve a write from `proposed_writes.params` alone — and reject a truncated payload.
 3. Point a different host at the same envelope and keep [swap-runtime](swap-runtime.md) step 6 (same eval, no domain fork).
 4. Reconstruct a `failed` result from `ops_event` + `errors` without opening a write ([ADR 0005](adr/0005-ops-owns-reconstruction.md)).
