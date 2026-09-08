@@ -36,7 +36,7 @@ Prefer [simple, composable patterns](https://www.anthropic.com/engineering/build
 
 **Swap a host without rewriting the domain:** [docs/swap-runtime.md](docs/swap-runtime.md).
 
-**Typed handoffs (brain · workers · ops):** [docs/cookbook-handoff.md](docs/cookbook-handoff.md) · [ADR 0004](docs/adr/0004-handoff-contracts.md).
+**Typed handoffs (brain · workers · ops):** [docs/cookbook-handoff.md](docs/cookbook-handoff.md) · [ADR 0004](docs/adr/0004-handoff-contracts.md) · [ADR 0005](docs/adr/0005-ops-owns-reconstruction.md).
 
 ---
 
@@ -48,6 +48,7 @@ Decision log (index + status): [docs/adr/README.md](docs/adr/README.md). Format:
 - [0002 — HITL on writes](docs/adr/0002-hitl-on-writes.md)
 - [0003 — Vendor-agnostic](docs/adr/0003-vendor-agnostic.md)
 - [0004 — Handoff contracts](docs/adr/0004-handoff-contracts.md)
+- [0005 — Ops owns reconstruction](docs/adr/0005-ops-owns-reconstruction.md)
 
 ---
 

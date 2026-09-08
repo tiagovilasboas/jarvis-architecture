@@ -2,12 +2,13 @@
 
 This is the contract [ADR 0001](adr/0001-brain-vs-workers.md) asked for and [ADR 0004](adr/0004-handoff-contracts.md) accepted. It is a **domain envelope**, not a product and not a wire protocol.
 
-If ops cannot reconstruct the write, HITL is theater. If a host swap forces you to rewrite prompts because the payload was a pasted context window, the domain leaked into the runtime.
+If ops cannot reconstruct the write, the control is theater ([ADR 0005](adr/0005-ops-owns-reconstruction.md)). If a host swap forces you to rewrite prompts because the payload was a pasted context window, the domain leaked into the runtime.
 
 Aligned with:
 
 - [ADR 0002 — HITL on writes](adr/0002-hitl-on-writes.md) (fail closed; reads may be optimistic)
 - [ADR 0003 — Vendor-agnostic](adr/0003-vendor-agnostic.md)
+- [ADR 0005 — Ops owns reconstruction](adr/0005-ops-owns-reconstruction.md)
 - [Building effective agents](https://www.anthropic.com/engineering/building-effective-agents) (orchestrator–workers; add complexity only when it improves outcomes)
 - [What is A2A?](https://a2a-protocol.org/latest/topics/what-is-a2a/) · [Life of a Task](https://a2a-protocol.org/latest/topics/life-of-a-task/)
 - [MCP architecture](https://modelcontextprotocol.io/docs/learn/architecture) (agent-to-tool; not agent-to-agent)
@@ -318,6 +319,100 @@ Brain may then assign a **merger** worker with `write_policy: allowlist` scoped 
 }
 ```
 
+## Worked example — ops failure (eval red)
+
+Same `correlation_id` as the merge path. The suite is red. There is **no write to approve** — mutation policy is [ADR 0002](adr/0002-hitl-on-writes.md); this path is scoring ([ADR 0005](adr/0005-ops-owns-reconstruction.md)). Host can be Goose, Cursor, Codex, a CLI — irrelevant to the envelope.
+
+```mermaid
+sequenceDiagram
+  participant Brain
+  participant Worker
+  participant Ops
+  Brain->>Worker: assign
+  Worker->>Ops: ops_event (eval fail)
+  Worker->>Brain: result (failed)
+```
+
+### 1. Worker reports: failed
+
+```json
+{
+  "schema": "handoff/v1",
+  "id": "hnd_aa01f8e2",
+  "correlation_id": "corr_pr_1842",
+  "parent_id": "hnd_7f3a2c10",
+  "from": { "layer": "worker", "role": "code-reviewer" },
+  "to": { "layer": "brain", "role": "planner" },
+  "kind": "result",
+  "goal": "Review PR 1842 against acceptance; propose merge only if the suite is green.",
+  "constraints": [],
+  "inputs": {
+    "refs": [
+      { "kind": "handoff", "id": "hnd_7f3a2c10" },
+      { "kind": "artifact", "id": "art_review_1842_red" }
+    ]
+  },
+  "budget": { "tools": [] },
+  "write_policy": "deny",
+  "acceptance": [],
+  "observability": {
+    "trace_id": "4bf92f3577b34da6a3ce929d0e0e4736",
+    "eval_suite": "pr-review"
+  },
+  "status": "failed",
+  "artifacts": [
+    { "kind": "artifact", "id": "art_review_1842_red" }
+  ],
+  "evidence": [
+    "evals.run pr-review → 4 pass, 2 fail, 0 skip."
+  ],
+  "proposed_writes": [],
+  "errors": [
+    {
+      "code": "eval_failed",
+      "detail": "pr-review failed at path:line claims in src/merge.ts:88 and src/merge.ts:141."
+    }
+  ]
+}
+```
+
+`errors` are factual. Do not attach `proposed_writes`. A red eval is not a mutation.
+
+### 2. Ops records the failed control
+
+```json
+{
+  "schema": "handoff/v1",
+  "id": "hnd_evt_1842_eval_red",
+  "correlation_id": "corr_pr_1842",
+  "parent_id": "hnd_7f3a2c10",
+  "from": { "layer": "worker", "role": "code-reviewer" },
+  "to": { "layer": "ops", "role": "eval" },
+  "kind": "ops_event",
+  "goal": "Record pr-review scores for hnd_7f3a2c10.",
+  "constraints": [],
+  "inputs": {
+    "refs": [{ "kind": "handoff", "id": "hnd_7f3a2c10" }],
+    "inline": {
+      "event": "eval",
+      "suite": "pr-review",
+      "pass": 4,
+      "fail": 2,
+      "skip": 0
+    }
+  },
+  "budget": { "tools": [] },
+  "write_policy": "deny",
+  "acceptance": [],
+  "observability": {
+    "trace_id": "4bf92f3577b34da6a3ce929d0e0e4736",
+    "eval_suite": "pr-review"
+  }
+}
+```
+
+Ops can reconstruct the outcome from `status`, `errors`, and this row. A host incident ticket may *display* the same `id` / `trace_id`; it does not replace them. Brain may assign a **new** child to fix the two findings — new `id`, same `correlation_id`. Do not mutate `hnd_7f3a2c10` or retry by pasting a transcript.
+
 ## Mapping (do not collapse)
 
 | This envelope | Public mapping |
@@ -326,6 +421,7 @@ Brain may then assign a **merger** worker with `write_policy: allowlist` scoped 
 | `correlation_id` | A2A `contextId`; LangGraph `thread_id`; OTel trace |
 | `parent_id` / `inputs.refs` of kind `handoff` | A2A `referenceTaskIds` |
 | `status: needs_hitl` | A2A `input-required`; ACP permission request; LangGraph interrupt; MCP [elicitation](https://modelcontextprotocol.io/specification/latest/client/elicitation) |
+| `status: failed` / `blocked` | Eval row + `errors`; **not** `input-required`. Host incident tickets adapt the same `id` ([ADR 0005](adr/0005-ops-owns-reconstruction.md)) |
 | `artifacts` | A2A `Task.artifacts`; ACP diffs; worker MCP tool results |
 | `budget.tools` | MCP tool allowlist on that worker — not the whole host catalog |
 | `assign` payload | OpenAI Agents SDK `handoff(..., input_type=…)` as *one* adapter |
@@ -346,6 +442,8 @@ A2A is how **peers** talk. MCP is how a worker reaches **tools**. ACP is how an 
 | Peer agent wrapped as an MCP tool | [A2A anti-pattern](https://a2a-protocol.org/latest/topics/what-is-a2a/) |
 | Reuse HITL after `head_sha` changed | Approval unbound from parameters |
 | New required field without bumping `handoff/v1` | Silent incompatibility across hosts |
+| Retry `failed` by pasting a new transcript | Ops cannot score the same control after a host swap ([ADR 0005](adr/0005-ops-owns-reconstruction.md)) |
+| Promote a red eval to `needs_hitl` | A score is not a mutation; the write is unreconstructable |
 
 ## Ship check
 
@@ -354,6 +452,7 @@ You are done when a Staff engineer can:
 1. Emit `assign` / `result` / `hitl_*` without naming a host.
 2. Approve a write from `proposed_writes.params` alone — and reject a truncated payload.
 3. Point a different host at the same envelope and keep [swap-runtime](swap-runtime.md) step 6 (same eval, no domain fork).
+4. Reconstruct a `failed` result from `ops_event` + `errors` without opening a write ([ADR 0005](adr/0005-ops-owns-reconstruction.md)).
 
 ## Out of scope
 

@@ -12,6 +12,7 @@ How to propose a new record: [CONTRIBUTING.md](../../CONTRIBUTING.md).
 | [0002](0002-hitl-on-writes.md) | Accepted | HITL on writes | Fail closed on mutations: human-in-the-loop or explicit allowlist; reads may be optimistic. |
 | [0003](0003-vendor-agnostic.md) | Accepted | Vendor-agnostic runtime | Architecture = layers + open protocols; Goose / Cursor / Codex / Kiro are examples only. |
 | [0004](0004-handoff-contracts.md) | Accepted | Handoff contracts | Typed envelope between brain · workers · ops; refs not transcripts; writes stay fail-closed. |
+| [0005](0005-ops-owns-reconstruction.md) | Accepted | Ops owns reconstruction | Ops reconstructs writes and scores outcomes from the envelope; host HUDs are adapters. |
 
 ## Status lifecycle
 
