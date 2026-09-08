@@ -54,9 +54,13 @@ Decision log (index + status): [docs/adr/README.md](docs/adr/README.md). Format:
 
 ## Related
 
-- [awesome-agentic-ai](https://github.com/tiagovilasboas/awesome-agentic-ai) — Curated list (MCP · harness · AppSec)
-- [agent-measurement](https://github.com/tiagovilasboas/agent-measurement) — Measure, do not train
-- [agentic-code-review](https://github.com/tiagovilasboas/agentic-code-review) — Skills · runbooks · guardrails
+This repo is the layer model. Siblings are scoped kits — not implementations of these ADRs.
+
+- [awesome-agentic-ai](https://github.com/tiagovilasboas/awesome-agentic-ai) — Curated list: MCP · harness · AppSec. Decision filter, not architecture.
+- [agent-measurement](https://github.com/tiagovilasboas/agent-measurement) — Evals: suites, named metrics, markdown reports. Measure; do not train.
+- [agentic-code-review](https://github.com/tiagovilasboas/agentic-code-review) — AppSec PR review: skills, runbooks, `path:line` or silence.
+- [kiro-crew](https://github.com/tiagovilasboas/kiro-crew) — Crew pattern: Planner → Implementer → Reviewer → Ops. Kiro is the example host.
+- [grok-bot-architecture](https://github.com/tiagovilasboas/grok-bot-architecture) — Desktop assistant OS: chief-of-staff, specialists, shared computer, connectors.
 
 Public refs: [Goose architecture](https://block-goose.mintlify.app/concepts/architecture) · [agents/subagents](https://block-goose.mintlify.app/concepts/agents) · [Building effective agents](https://www.anthropic.com/engineering/building-effective-agents) · [OpenAI Agents SDK](https://github.com/openai/openai-agents-python) · [A2A Protocol](https://a2a-protocol.org/) · [ACP](https://agentclientprotocol.com/) · [LangGraph multi-agent](https://langchain-ai.github.io/langgraph/concepts/multi_agent/) · [MCP](https://modelcontextprotocol.io) · [Architectural Decision Records](https://adr.github.io/)
 
