@@ -15,4 +15,4 @@ We will pass work between **brain**, **workers**, and **ops** as a **typed hando
 − Unknown required fields fail closed
 − Chat-only hosts need a thin adapter
 
-Practical shape and example payloads: [cookbook-handoff](../cookbook-handoff.md).
+Practical shape and example payloads: [cookbook — Envelope](../cookbook-handoff.md#envelope).

@@ -13,3 +13,6 @@ Agents that merge, pay, delete, or message externally create irreversible risk.
 + Safer defaults for Staff delivery
 + Aligns with AppSec / AISVS agentic controls
 − Slower demos; document the trade-off
+
+## Related
+Write-path payloads: [cookbook — propose a merge](../cookbook-handoff.md#propose-a-merge).
