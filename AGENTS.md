@@ -11,7 +11,7 @@ docs/swap-runtime.md
 docs/cookbook-handoff.md
 ```
 
-Existing records: `0001-brain-vs-workers`, `0002-hitl-on-writes`, `0003-vendor-agnostic`, `0004-handoff-contracts`. Index: `docs/adr/README.md`.
+Existing records: `0001-brain-vs-workers`, `0002-hitl-on-writes`, `0003-vendor-agnostic`, `0004-handoff-contracts`, `0005-ops-owns-reconstruction`. Index: `docs/adr/README.md`.
 
 ## Do
 

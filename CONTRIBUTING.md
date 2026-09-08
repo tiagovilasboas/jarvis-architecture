@@ -79,6 +79,7 @@ Accepted records live in `docs/adr/`. Start from the [ADR index](docs/adr/README
 - [0002 — HITL on writes](docs/adr/0002-hitl-on-writes.md)
 - [0003 — Vendor-agnostic](docs/adr/0003-vendor-agnostic.md)
 - [0004 — Handoff contracts](docs/adr/0004-handoff-contracts.md)
+- [0005 — Ops owns reconstruction](docs/adr/0005-ops-owns-reconstruction.md)
 
 Runtime swap without a domain rewrite: [docs/swap-runtime.md](docs/swap-runtime.md). Typed handoff payloads: [docs/cookbook-handoff.md](docs/cookbook-handoff.md).
 
