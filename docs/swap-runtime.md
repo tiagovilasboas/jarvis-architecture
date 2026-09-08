@@ -7,7 +7,7 @@ Aligned with:
 - [ADR 0001 — Brain vs workers](adr/0001-brain-vs-workers.md)
 - [ADR 0002 — HITL on writes](adr/0002-hitl-on-writes.md)
 - [ADR 0003 — Vendor-agnostic](adr/0003-vendor-agnostic.md)
-- [ADR 0004 — Handoff contracts](adr/0004-handoff-contracts.md) · [cookbook](cookbook-handoff.md)
+- [ADR 0004 — Handoff contracts](adr/0004-handoff-contracts.md) · [cookbook](cookbook-handoff.md#week-1)
 - [ADR 0005 — Ops owns reconstruction](adr/0005-ops-owns-reconstruction.md)
 - [Building effective agents](https://www.anthropic.com/engineering/building-effective-agents) (prefer simple, composable patterns; add complexity only when it improves outcomes)
 - [MCP architecture](https://modelcontextprotocol.io/docs/learn/architecture) (agent-to-tool context: host / client / server)
