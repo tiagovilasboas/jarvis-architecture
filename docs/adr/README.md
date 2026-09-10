@@ -20,7 +20,7 @@ Actionable path (brain → workers → ops): [week-1](../cookbook-handoff.md#wee
 
 | ADR | Section |
 | --- | --- |
-| [0001](0001-brain-vs-workers.md) | [assign](../cookbook-handoff.md#assign) — no secrets on the brain payload |
+| [0001](0001-brain-vs-workers.md) | [assign](../cookbook-handoff.md#assign): no secrets on the brain payload |
 | [0002](0002-hitl-on-writes.md) | [Propose a merge](../cookbook-handoff.md#propose-a-merge) |
 | [0003](0003-vendor-agnostic.md) | [Mapping](../cookbook-handoff.md#mapping) |
 | [0004](0004-handoff-contracts.md) | [Envelope](../cookbook-handoff.md#envelope) · [broken handoff](../cookbook-handoff.md#broken-handoff) |
@@ -37,5 +37,7 @@ Never reuse a number. When reversing a decision, keep the old file and mark it `
 - Runtime swap checklist (no domain rewrite): [../swap-runtime.md](../swap-runtime.md)
 - Handoff cookbook (week-1 + payloads): [../cookbook-handoff.md#week-1](../cookbook-handoff.md#week-1)
 - Layer model (brain · workers · ops): [../../README.md](../../README.md)
+- This repo vs grok-bot vs kiro-crew (related, not duplicates): [../when-vs-grok-bot.md](../when-vs-grok-bot.md)
+- CI fixtures: [../../examples/handoff.broken.json](../../examples/handoff.broken.json) · [../../examples/handoff.fixed.json](../../examples/handoff.fixed.json)
 
-Ops note: persist `id`, `trace_id`, and `ops_event` outside the host session. A HUD only renders them ([0005](0005-ops-owns-reconstruction.md)). Score those rows with an eval harness, not this repo — [agent-measurement](https://github.com/tiagovilasboas/agent-measurement) (measure, do not train).
+Ops note: persist `id`, `trace_id`, and `ops_event` outside the host session. A HUD only renders them ([0005](0005-ops-owns-reconstruction.md)). Score those rows with an eval harness, not this repo: [agent-measurement](https://github.com/tiagovilasboas/agent-measurement) (measure, do not train).

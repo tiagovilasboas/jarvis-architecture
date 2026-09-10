@@ -75,14 +75,15 @@ Workers fetch `inputs.refs` with **their** credentials. Resume is a new `id` wit
 
 ### When to use siblings
 
-This repo is the layer model. Siblings are scoped kits — not implementations of these ADRs.
+This repo is the layer model. Siblings are scoped kits, not implementations of these ADRs and not ports of each other. Honest split (this vs grok-bot vs kiro-crew): [when-vs-grok-bot](when-vs-grok-bot.md).
 
 | When you need | Open |
 | --- | --- |
-| Evals — suites, named metrics, markdown reports | [agent-measurement](https://github.com/tiagovilasboas/agent-measurement) |
-| AppSec PR review — `path:line` or silence | [agentic-code-review](https://github.com/tiagovilasboas/agentic-code-review) |
-| Role cards — Planner / Implementer / Reviewer / Ops | [kiro-crew](https://github.com/tiagovilasboas/kiro-crew) · [`crew/roles.md`](https://github.com/tiagovilasboas/kiro-crew/blob/main/crew/roles.md) |
-| Desktop chief-of-staff + what enters the window | [grok-bot-architecture](https://github.com/tiagovilasboas/grok-bot-architecture) · [`context-engineering.md`](https://github.com/tiagovilasboas/grok-bot-architecture/blob/main/docs/context-engineering.md) |
+| Layer model + typed `handoff/v1` | This repo ([week-1](#week-1)) |
+| Role cards: Planner / Implementer / Reviewer / Ops | [kiro-crew](https://github.com/tiagovilasboas/kiro-crew) · [`crew/roles.md`](https://github.com/tiagovilasboas/kiro-crew/blob/main/crew/roles.md) |
+| Desktop chief-of-staff + shared computer | [grok-bot-architecture](https://github.com/tiagovilasboas/grok-bot-architecture) · [`context-engineering.md`](https://github.com/tiagovilasboas/grok-bot-architecture/blob/main/docs/context-engineering.md) |
+| Evals: suites, named metrics, markdown reports | [agent-measurement](https://github.com/tiagovilasboas/agent-measurement) |
+| AppSec PR review: `path:line` or silence | [agentic-code-review](https://github.com/tiagovilasboas/agentic-code-review) |
 | Whether to add an MCP server or harness at all | [awesome-agentic-ai](https://github.com/tiagovilasboas/awesome-agentic-ai) (curation filter) |
 
 Do not copy sibling role names into the envelope `role` field. `role` is a worker scope, not a kit.
@@ -521,39 +522,16 @@ Ops can reconstruct the outcome from `status`, `errors`, and this row. A host in
 
 Same `correlation_id` as the merge path. The reviewer **applied** the squash-merge and returned `ok`. Ops is left with a chat blob. That write cannot be rebuilt from envelope fields — so it must not count as done ([ADR 0004](adr/0004-handoff-contracts.md), [ADR 0005](adr/0005-ops-owns-reconstruction.md)). Host can be Goose, Cursor, Codex, a CLI — irrelevant; the envelope is the control.
 
-**~10 min:** broken JSON → layer table → fixed JSON → notes. Do not open a sibling.
+**~10 min:** broken fixture → layer table → fixed fixture → notes. Do not open a sibling.
+
+Canonical fixtures (CI: `node scripts/validate-handoff.mjs`):
+
+- Broken (must reject): [`examples/handoff.broken.json`](../examples/handoff.broken.json)
+- Fixed (must accept): [`examples/handoff.fixed.json`](../examples/handoff.fixed.json)
 
 ### Broken `result` (silent write)
 
-Primary failure: **silent write**. Symptoms you will also see: untyped blob, missing `trace_id`, empty `proposed_writes`, reviewer acting as merger.
-
-```json
-{
-  "schema": "handoff/v1",
-  "id": "hnd_c4e91b70",
-  "correlation_id": "corr_pr_1842",
-  "parent_id": "hnd_7f3a2c10",
-  "from": { "layer": "worker", "role": "code-reviewer" },
-  "to": { "layer": "brain", "role": "planner" },
-  "kind": "result",
-  "goal": "Review PR 1842 against acceptance; propose merge only if the suite is green.",
-  "constraints": [],
-  "inputs": {
-    "refs": [],
-    "inline": {
-      "blob": "Host chat. Reviewer: LGTM. I squash-merged PR 1842 from the HUD. Thread said ship it."
-    }
-  },
-  "budget": { "tools": [] },
-  "write_policy": "hitl",
-  "acceptance": [],
-  "status": "ok",
-  "artifacts": [],
-  "evidence": ["Merged."],
-  "proposed_writes": [],
-  "errors": []
-}
-```
+Primary failure: **silent write**. Symptoms you will also see: untyped blob, missing `trace_id`, empty `proposed_writes`, reviewer acting as merger. Open the broken fixture above.
 
 | Defect | Contract |
 | --- | --- |
@@ -575,57 +553,9 @@ Brain that never validates required fields will route this `ok` as success. That
 
 ### Fixed `result`
 
-Mutation **proposed**, not applied. Same shape as [propose a merge](#propose-a-merge) step 2.
+Mutation **proposed**, not applied. Same shape as [propose a merge](#propose-a-merge) step 2. Open [`examples/handoff.fixed.json`](../examples/handoff.fixed.json).
 
-```json
-{
-  "schema": "handoff/v1",
-  "id": "hnd_9c11e4aa",
-  "correlation_id": "corr_pr_1842",
-  "parent_id": "hnd_7f3a2c10",
-  "from": { "layer": "worker", "role": "code-reviewer" },
-  "to": { "layer": "brain", "role": "planner" },
-  "kind": "result",
-  "goal": "Review PR 1842 against acceptance; propose merge only if the suite is green.",
-  "constraints": [],
-  "inputs": {
-    "refs": [
-      { "kind": "handoff", "id": "hnd_7f3a2c10" },
-      { "kind": "artifact", "id": "art_review_1842" }
-    ]
-  },
-  "budget": { "tools": [] },
-  "write_policy": "hitl",
-  "acceptance": [],
-  "observability": {
-    "trace_id": "4bf92f3577b34da6a3ce929d0e0e4736",
-    "eval_suite": "pr-review"
-  },
-  "status": "needs_hitl",
-  "artifacts": [
-    { "kind": "artifact", "id": "art_review_1842" }
-  ],
-  "evidence": [
-    "evals.run pr-review → 6 pass, 0 fail, 1 skip (docs-only path)."
-  ],
-  "proposed_writes": [
-    {
-      "action": "merge_pull_request",
-      "reversibility": "externally_reversible",
-      "params": {
-        "repo": "example/repo",
-        "number": 1842,
-        "head_sha": "a0efe3d11808",
-        "method": "squash",
-        "delete_branch": false
-      }
-    }
-  ],
-  "errors": []
-}
-```
-
-`params` are enough to replay the write. Do not truncate them.
+`params` are enough to replay the write. Do not truncate them. CI accepts this fixture and rejects the broken one.
 
 ### Ops reconstruction notes
 
@@ -678,7 +608,7 @@ You are done when a Staff engineer can:
 2. Approve a write from `proposed_writes.params` alone — and reject a truncated payload.
 3. Point a different host at the same envelope and keep [swap-runtime](swap-runtime.md) step 6 (same eval, no domain fork).
 4. Reconstruct a `failed` result from `ops_event` + `errors` without opening a write ([ADR 0005](adr/0005-ops-owns-reconstruction.md)).
-5. Walk [broken handoff](#broken-handoff): reject the silent `ok`, reconstruct from the fixed `result` (`proposed_writes.params` + `trace_id`).
+5. Walk [broken handoff](#broken-handoff): reject the silent `ok` (`examples/handoff.broken.json`), reconstruct from the fixed `result` (`examples/handoff.fixed.json`). Run `node scripts/validate-handoff.mjs`.
 
 ## Out of scope
 
