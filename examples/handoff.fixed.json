@@ -1,0 +1,45 @@
+{
+  "schema": "handoff/v1",
+  "id": "hnd_9c11e4aa",
+  "correlation_id": "corr_pr_1842",
+  "parent_id": "hnd_7f3a2c10",
+  "from": { "layer": "worker", "role": "code-reviewer" },
+  "to": { "layer": "brain", "role": "planner" },
+  "kind": "result",
+  "goal": "Review PR 1842 against acceptance; propose merge only if the suite is green.",
+  "constraints": [],
+  "inputs": {
+    "refs": [
+      { "kind": "handoff", "id": "hnd_7f3a2c10" },
+      { "kind": "artifact", "id": "art_review_1842" }
+    ]
+  },
+  "budget": { "tools": [] },
+  "write_policy": "hitl",
+  "acceptance": [],
+  "observability": {
+    "trace_id": "4bf92f3577b34da6a3ce929d0e0e4736",
+    "eval_suite": "pr-review"
+  },
+  "status": "needs_hitl",
+  "artifacts": [
+    { "kind": "artifact", "id": "art_review_1842" }
+  ],
+  "evidence": [
+    "evals.run pr-review → 6 pass, 0 fail, 1 skip (docs-only path)."
+  ],
+  "proposed_writes": [
+    {
+      "action": "merge_pull_request",
+      "reversibility": "externally_reversible",
+      "params": {
+        "repo": "example/repo",
+        "number": 1842,
+        "head_sha": "a0efe3d11808",
+        "method": "squash",
+        "delete_branch": false
+      }
+    }
+  ],
+  "errors": []
+}
