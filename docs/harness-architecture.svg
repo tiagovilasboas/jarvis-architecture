@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 540" width="900" height="540" font-family="ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace">
+  <defs>
+    <style>
+      .label { font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; }
+      .mono  { font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace; }
+    </style>
+    <marker id="arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#64748b"/>
+    </marker>
+    <marker id="arr-mcp" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#3b82f6"/>
+    </marker>
+    <marker id="arr-manual" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#f59e0b"/>
+    </marker>
+    <marker id="arr-exec" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#10b981"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="540" fill="#0d1117"/>
+
+  <!-- ── CAMADA 1: MEMÓRIA ────────────────────────────────── -->
+  <rect x="340" y="24" width="220" height="64" rx="12" fill="#1e293b" stroke="#475569" stroke-width="1.5"/>
+  <text x="450" y="50" text-anchor="middle" class="label" font-size="13" font-weight="700" fill="#f1f5f9">📚 Logseq RAG</text>
+  <text x="450" y="70" text-anchor="middle" class="label" font-size="11" fill="#94a3b8">memória central</text>
+
+  <!-- ── CAMADA 2: CONTEXTO CONFIGURADO ──────────────────── -->
+  <rect x="60" y="160" width="200" height="72" rx="10" fill="#1e3a5a" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="160" y="185" text-anchor="middle" class="label" font-size="12" font-weight="600" fill="#bfdbfe">Kiro config</text>
+  <text x="160" y="202" text-anchor="middle" class="mono" font-size="10" fill="#93c5fd">agents + skills</text>
+  <text x="160" y="218" text-anchor="middle" class="mono" font-size="10" fill="#93c5fd">MCPs · ~40 steerings</text>
+
+  <rect x="350" y="160" width="200" height="72" rx="10" fill="#1e3a5a" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="450" y="185" text-anchor="middle" class="label" font-size="12" font-weight="600" fill="#bfdbfe">Cursor config</text>
+  <text x="450" y="202" text-anchor="middle" class="mono" font-size="10" fill="#93c5fd">mesmas skills + MCPs</text>
+  <text x="450" y="218" text-anchor="middle" class="mono" font-size="10" fill="#93c5fd">Graphify</text>
+
+  <rect x="640" y="160" width="200" height="72" rx="10" fill="#1e2a1e" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="740" y="185" text-anchor="middle" class="label" font-size="12" font-weight="600" fill="#fde68a">ChatGPT config</text>
+  <text x="740" y="202" text-anchor="middle" class="mono" font-size="10" fill="#fcd34d">contexto</text>
+  <text x="740" y="218" text-anchor="middle" class="mono" font-size="10" fill="#fcd34d">manual</text>
+
+  <!-- ── CAMADA 3: HARNESSES ──────────────────────────────── -->
+  <rect x="60" y="310" width="200" height="60" rx="10" fill="#2e1065" stroke="#7c3aed" stroke-width="2"/>
+  <text x="160" y="337" text-anchor="middle" class="label" font-size="14" font-weight="700" fill="#f5f3ff">🔧 Kiro</text>
+  <text x="160" y="356" text-anchor="middle" class="label" font-size="11" fill="#c4b5fd">trampo</text>
+
+  <rect x="350" y="310" width="200" height="60" rx="10" fill="#1a1a1a" stroke="#6b7280" stroke-width="2"/>
+  <text x="450" y="337" text-anchor="middle" class="label" font-size="14" font-weight="700" fill="#f9fafb">💻 Cursor</text>
+  <text x="450" y="356" text-anchor="middle" class="label" font-size="11" fill="#9ca3af">dev</text>
+
+  <rect x="640" y="310" width="200" height="60" rx="10" fill="#f9fafb" stroke="#6b7280" stroke-width="2"/>
+  <text x="740" y="337" text-anchor="middle" class="label" font-size="14" font-weight="700" fill="#111827">💬 ChatGPT</text>
+  <text x="740" y="356" text-anchor="middle" class="label" font-size="11" fill="#374151">pessoal</text>
+
+  <!-- ── CAMADA 4: ORQUESTRAÇÃO ───────────────────────────── -->
+  <rect x="350" y="436" width="200" height="60" rx="10" fill="#1f2937" stroke="#374151" stroke-width="2"/>
+  <text x="450" y="461" text-anchor="middle" class="label" font-size="13" font-weight="700" fill="#f9fafb">🎯 Grok Bot</text>
+  <text x="450" y="479" text-anchor="middle" class="label" font-size="10" fill="#9ca3af">orquestra no Cursor</text>
+
+  <rect x="210" y="476" width="108" height="48" rx="8" fill="#064e3b" stroke="#059669" stroke-width="1.5"/>
+  <text x="264" y="496" text-anchor="middle" class="label" font-size="10" font-weight="600" fill="#d1fae5">Cloud Agents</text>
+  <text x="264" y="512" text-anchor="middle" class="mono" font-size="9" fill="#6ee7b7">PRs GitHub</text>
+
+  <rect x="582" y="476" width="108" height="48" rx="8" fill="#064e3b" stroke="#059669" stroke-width="1.5"/>
+  <text x="636" y="496" text-anchor="middle" class="label" font-size="10" font-weight="600" fill="#d1fae5">Shell Mac</text>
+  <text x="636" y="512" text-anchor="middle" class="mono" font-size="9" fill="#6ee7b7">CLI aprovado</text>
+
+  <!-- ── CONEXÕES ─────────────────────────────────────────── -->
+  <line x1="380" y1="88" x2="220" y2="160" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="6,3" marker-end="url(#arr-mcp)"/>
+  <text x="270" y="126" class="label" font-size="10" fill="#60a5fa" transform="rotate(-26,270,126)">MCP</text>
+
+  <line x1="450" y1="88" x2="450" y2="160" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="6,3" marker-end="url(#arr-mcp)"/>
+  <text x="458" y="130" class="label" font-size="10" fill="#60a5fa">MCP</text>
+
+  <line x1="520" y1="88" x2="680" y2="160" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,4" marker-end="url(#arr-manual)"/>
+  <text x="610" y="118" class="label" font-size="10" fill="#fbbf24" transform="rotate(26,610,118)">manual</text>
+
+  <line x1="160" y1="232" x2="160" y2="310" stroke="#64748b" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="450" y1="232" x2="450" y2="310" stroke="#64748b" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="740" y1="232" x2="740" y2="310" stroke="#64748b" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <line x1="450" y1="370" x2="450" y2="436" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="455" y="408" class="label" font-size="10" fill="#9ca3af">contém</text>
+
+  <line x1="390" y1="480" x2="318" y2="493" stroke="#10b981" stroke-width="1.5" marker-end="url(#arr-exec)"/>
+  <line x1="510" y1="480" x2="582" y2="493" stroke="#10b981" stroke-width="1.5" marker-end="url(#arr-exec)"/>
+  <text x="346" y="472" class="label" font-size="9" fill="#6ee7b7">executa</text>
+  <text x="516" y="472" class="label" font-size="9" fill="#6ee7b7">executa</text>
+
+  <!-- ── LEGENDA ────────────────────────────────────────────── -->
+  <line x1="28" y1="516" x2="52" y2="516" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="6,3"/>
+  <text x="56" y="520" class="label" font-size="10" fill="#94a3b8">MCP automático</text>
+  <line x1="168" y1="516" x2="192" y2="516" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,4"/>
+  <text x="196" y="520" class="label" font-size="10" fill="#94a3b8">manual</text>
+  <line x1="268" y1="516" x2="292" y2="516" stroke="#64748b" stroke-width="1.5"/>
+  <text x="296" y="520" class="label" font-size="10" fill="#94a3b8">carrega config</text>
+  <line x1="420" y1="516" x2="444" y2="516" stroke="#10b981" stroke-width="1.5"/>
+  <text x="448" y="520" class="label" font-size="10" fill="#94a3b8">executa</text>
+</svg>
