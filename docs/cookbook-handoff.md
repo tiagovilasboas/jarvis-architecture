@@ -82,8 +82,8 @@ This repo is the layer model. Siblings are scoped kits, not implementations of t
 | Layer model + typed `handoff/v1` | This repo ([week-1](#week-1)) |
 | Role cards: Planner / Implementer / Reviewer / Ops | [kiro-crew](https://github.com/tiagovilasboas/kiro-crew) · [`crew/roles.md`](https://github.com/tiagovilasboas/kiro-crew/blob/main/crew/roles.md) |
 | Desktop chief-of-staff + shared computer | [grok-bot-architecture](https://github.com/tiagovilasboas/grok-bot-architecture) · [`context-engineering.md`](https://github.com/tiagovilasboas/grok-bot-architecture/blob/main/docs/context-engineering.md) |
-| Evals: suites, named metrics, markdown reports | [agent-measurement](https://github.com/tiagovilasboas/agent-measurement) |
-| AppSec PR review: `path:line` or silence | [agentic-code-review](https://github.com/tiagovilasboas/agentic-code-review) |
+| Evals: suites, named metrics, markdown reports | [ai-agent-evals](https://github.com/tiagovilasboas/ai-agent-evals) |
+| AppSec PR review: `path:line` or silence | [ai-code-review](https://github.com/tiagovilasboas/ai-code-review) |
 | Whether to add an MCP server or harness at all | [awesome-agentic-ai](https://github.com/tiagovilasboas/awesome-agentic-ai) (curation filter) |
 
 Do not copy sibling role names into the envelope `role` field. `role` is a worker scope, not a kit.
