@@ -40,4 +40,4 @@ Never reuse a number. When reversing a decision, keep the old file and mark it `
 - This repo vs grok-bot vs kiro-crew (related, not duplicates): [../when-vs-grok-bot.md](../when-vs-grok-bot.md)
 - CI fixtures: [../../examples/handoff.broken.json](../../examples/handoff.broken.json) · [../../examples/handoff.fixed.json](../../examples/handoff.fixed.json)
 
-Ops note: persist `id`, `trace_id`, and `ops_event` outside the host session. A HUD only renders them ([0005](0005-ops-owns-reconstruction.md)). Score those rows with an eval harness, not this repo: [ai-agent-evals](https://github.com/tiagovilasboas/ai-agent-evals) (measure, do not train).
+Ops note: persist `id`, `trace_id`, and `ops_event` outside the host session. A HUD only renders them ([0005](0005-ops-owns-reconstruction.md)). Score those rows with an eval harness, not this repo.
