@@ -63,7 +63,6 @@ This repo is the layer model. Siblings are scoped kits, not implementations of t
 - [kiro-crew](https://github.com/tiagovilasboas/kiro-crew): Crew pattern (Planner → Implementer → Reviewer → Ops). Pasteable cards. Kiro is the example host.
 - [grok-bot-architecture](https://github.com/tiagovilasboas/grok-bot-architecture): Desktop assistant OS (chief-of-staff, specialists, shared computer, connectors).
 - [awesome-agentic-ai](https://github.com/tiagovilasboas/awesome-agentic-ai): Curated list (MCP · harness · AppSec). Decision filter, not architecture.
-- [ai-agent-evals](https://github.com/tiagovilasboas/ai-agent-evals): Evals (suites, named metrics, markdown reports). Measure; do not train.
 - [ai-code-review](https://github.com/tiagovilasboas/ai-code-review): AppSec PR review (skills, runbooks, `path:line` or silence).
 
 Public refs: [Goose architecture](https://block-goose.mintlify.app/concepts/architecture) · [agents/subagents](https://block-goose.mintlify.app/concepts/agents) · [Building effective agents](https://www.anthropic.com/engineering/building-effective-agents) · [OpenAI Agents SDK](https://github.com/openai/openai-agents-python) · [A2A Protocol](https://a2a-protocol.org/) · [ACP](https://agentclientprotocol.com/) · [LangGraph multi-agent](https://langchain-ai.github.io/langgraph/concepts/multi_agent/) · [MCP](https://modelcontextprotocol.io) · [Architectural Decision Records](https://adr.github.io/)
